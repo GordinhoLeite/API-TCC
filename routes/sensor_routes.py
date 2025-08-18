@@ -25,16 +25,20 @@ async def receber_dados(data: SensorData):
         agora = datetime.now(fuso_mt)
 
         # 🔁 Atualiza dados atuais do sensor
+        # Adiciona o campo 'umidade' ao documento do Firestore
         db.collection("sensores").document(data.sensorID).set({
             "temperatura": data.temperatura,
+            "umidade": data.umidade,  # ✅ Linha corrigida
             "distancia": data.distancia,
             "data": agora.strftime("%d/%m/%Y %H:%M:%S")
         }, merge=True)
 
         # 📌 Salva leitura no histórico
+        # Adiciona o campo 'umidade' ao histórico de leituras
         db.collection("sensores").document(data.sensorID).collection("leituras").add({
             "sensorID": data.sensorID,
             "temperatura": data.temperatura,
+            "umidade": data.umidade,  # ✅ Linha corrigida
             "distancia": data.distancia,
             "data": agora.strftime("%d/%m/%Y %H:%M:%S")
             
@@ -59,7 +63,7 @@ async def receber_dados(data: SensorData):
                 elif data.temperatura < temp_max - 1 and estado_atual == "ligado":
                     set_ventoinha_estado("desligado")
 
-           
+            
         return {
             "status": "sucesso",
             "timestamp": agora.isoformat(),
