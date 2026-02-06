@@ -1,13 +1,13 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from typing import Optional
 
-# ✅ Modelo de dados para receber as leituras dos sensores
-# O FastAPI usa este modelo para validar os dados recebidos na requisição
 class SensorData(BaseModel):
     sensorID: str
     temperatura: float
-    umidade: float  # ✅ Novo campo para a umidade
+    umidade: float
     distancia: float
+    volume: Optional[float] = 0.0      # Campo volume adicionado
+    porcentagem: Optional[float] = 0.0 # Campo porcentagem adicionado
 
-# ✅ Modelo de dados para controlar o estado da ventoinha
 class VentoinhaState(BaseModel):
-    estado: str = Field(..., pattern="^(ligado|desligado)$")
+    estado: str # "ligado" ou "desligado"
